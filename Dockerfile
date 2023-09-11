@@ -1,18 +1,21 @@
-# Use the Ubuntu latest image as the base
-FROM ubuntu:latest
+# Use the jenkins/agent  image as the base
+FROM jenkins/agent
 
 # Set environment variable VERSION
 ENV VERSION=1.2.0
 
-# Update package list and install required packages
-RUN apt-get update && apt-get install -y python3 zip unzip vim
+# switch to user root
+USER root
 
-#RUN pip install s
+# Update package list and install required packages
+RUN apt update && apt install -y \
+    python3 \
+    zip \
+    unzip \
+    vim
 
 # Copy zip_job.py into the image's /tmp folder
-COPY . /tmp
+COPY ./app /tmp
 
-CMD python3 /tmp/zip_job.py
-
-# Run a command upon container creation
-CMD python3  /tmp/print_info.py
+# Run commands upon container creation
+CMD python3 /tmp/print_info.py
